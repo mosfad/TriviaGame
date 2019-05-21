@@ -41,11 +41,12 @@ header {
     
     height: 25%;
     width: 25%;
-    border-radius: 8px;
+    border-radius: 15px;
     background: #483d8b;
     color: #fffafa;
     font-family: 'Permanent Marker', cursive;
     font-size: 36px;
+    cursor: pointer;
 
 
 }
