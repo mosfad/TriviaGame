@@ -1,0 +1,130 @@
+body{
+    background-image: url("../images/funky-lines.png");
+}
+
+#game-container{
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: center;
+    background: #e6e6fa;
+    height: 100%;
+    margin: 5%;
+    /*margin: 150px*/;
+    
+    
+    
+
+}
+h1{
+    font-size: 4em;
+    font-family: 'Courgette', cursive;
+    /*font-family: 'Roboto', sans-serif;*/
+    font-weight: bolder;
+    text-align: center;
+}
+
+header {
+    padding-top: 30px;
+    /*margin: 0 auto;*/
+    flex: 0 1 100%;
+
+}
+
+#btn{
+    flex: 0 1 100%;
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: center;
+}
+#start-btn{
+    /*margin: auto;*/
+    
+    height: 25%;
+    width: 25%;
+    border-radius: 8px;
+    background: #483d8b;
+    color: #fffafa;
+    font-family: 'Permanent Marker', cursive;
+    font-size: 36px;
+
+
+}
+}
+/*
+header{
+    background: #cf6800;
+    display: inline-block;
+    margin: 5px;
+    padding: 20px 5px;
+    font-size: 2em;
+    font-weight: bold;
+    color: #ffffff;
+
+}
+
+#instruct{
+    background: #ffffc8;
+    color: #008000;
+    width: 50%;
+    height: 32%;
+    margin: 5px;
+    padding: 20px 5px;
+    font-size: 1.15em;
+
+}
+
+.container-1 {
+    height: 17%;
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: flex-start;
+}
+
+#random-number{
+    background: #1f75fe;
+    width: 15%;
+    height: 63%;
+    margin: 5px;
+    padding: 15px 5px;
+    font-size: 1.5em;
+ 
+}
+
+.gameStats{
+    background: #87ceeb;
+    width: 8%;
+    height: 63%;
+    margin: 5px;
+    padding: 15px 5px;
+    font-size: 1.15em;
+    
+  
+
+}
+
+.text-score, #total-score{
+    background: #13546f;
+    width: 15%;
+    height: 10%;
+    margin: 5px;
+    padding: 5px;
+    color: #ffffff;
+    
+}
+.text-score{
+    height: 4%;
+    font-size: 1.15em;
+}
+#total-score{
+    font-size: 1.5em;
+}
+
+img{
+    margin: 0;
+    padding: 0;
+}
+.crystals{
+    margin: 5px;
+    padding: 5px;
+    cursor: pointer;
+}*/
