@@ -1,15 +1,17 @@
 $(document).ready(function() {
 //Global variables and function------------------
 var questInterval;
-var questTime;
+var ansInterval;
+//var questTime;
 var numCorrect = 0;
 var numWrong = 0;
 var numNoAns = 0;
-var wasStartClicked = false;
-var eachQuest = "";
+var wasStartClicked = false;   //how do i track last question?
+var eachQuest = "";    
 var currAns = "";
 var questTracker = 0;
-var optionsArray;//array
+var optionsArray = [];
+var timer = 30;//displays current time in seconds.
 
 
 //resets the game.
@@ -32,6 +34,7 @@ function getCurrQuest() {
     //update the current question
     var questArray = Object.keys(questBank[questTracker]); 
     eachQuest = questArray[0];
+    console.log(eachQuest);
     //don't update tracker yet; need it for corresponding options.
     
 }
@@ -40,26 +43,73 @@ function getCurrOptions() {
     //update the options for the current question
     //use questTracker to get Array of corresponding questions
     var optionsAndFlagArray = Object.values(questBank[questTracker]);
-    optionsArray = Object.keys(optionsAndFlagArray);
+    var optionsAndFlagObj = optionsAndFlagArray[0];
+    optionsArray = Object.keys(optionsAndFlagObj);
     //update questTracker for the next question
+    console.log(optionsArray);
     questTracker++;
 
 
 }
+//REVIEW THIS CODE NEXT!!!!!!!!!!!!!!!!!!!!!!!!!!..................................................................................................................
+function questLayout() {
+    getCurrQuest();
+    getCurrOptions();
+    //organizes the layout of page so that questions and options are displayed.
+    var timeDisp = $("<p id='timer'></p>").text("Time Remaining: " + timer + "Seconds");
+    var questDisp = $("p").text(eachQuest);
+    console.log(timeDisp.text());
+    console.log(questDisp.text());
+    //how to show options in different lines and 
+    var optionDisp;
+    for (var i = 0; i < optionsArray.length; i++) { // WHY IS optionsArray UNDEFINED???????
+        if (i === 0) {
+            optionDisp = $("p").text(optionsArray[i]);
+        }
+        else{
+            optionDisp.append("<p>" + optionsArray[i] + "<p>");
+        }
+    }
+    $("#quest-container").append(timeDisp, questDisp, optionDisp);
+
+}
+
+function countDown() {
+    //tracks the amount ot time alloted to each question.
+    timer--;
+    $("#timer").text("Time Remaining: " + timer + "Seconds");
+}
 function dispQuests() {
+    //time alloted to each question is 30 seconds.
+    timer = 30;
     if (wasStartClicked) {
         $("#start-btn").remove();
+        questLayout();
     }
     //get and display current quest and options
     
 }
 
+//WHEN TO CLEAR THE setInterval() for a new question.
+
 //Timer is set to 30 seconds for each question.
-var questTimer = setTimeout(dispQuests, 30000);
+var questTimer;
 
 //attach a click event to the start button
 $("#start-btn").click(function(){
-    wasStartClicked = true;
+    var timeDisp = $("p #timer").text("Time Remaining: " + timer + "Seconds");
+    $("#quest-container").text("my name is.......");
+    console.log($("#quest-container").text());
+
+    //wasStartClicked = true;
+    //timer interval or
+    if (wasStartClicked === false) {
+        wasStartClicked = true;
+        //display the questions and options
+        dispQuests();
+        //start the countdown
+        questInterval = setInterval(countDown, 1000);
+    }
 
 })
 
