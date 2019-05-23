@@ -51,23 +51,24 @@ function getCurrOptions() {
 
 
 }
-//REVIEW THIS CODE NEXT!!!!!!!!!!!!!!!!!!!!!!!!!!..................................................................................................................
+//
 function questLayout() {
     getCurrQuest();
     getCurrOptions();
     //organizes the layout of page so that questions and options are displayed.
     var timeDisp = $("<p id='timer'></p>").text("Time Remaining: " + timer + "Seconds");
-    var questDisp = $("p").text(eachQuest);
+    var questDisp = $("<p id= 'each-quest'></p>").text(eachQuest);
     console.log(timeDisp.text());
     console.log(questDisp.text());
     //how to show options in different lines and 
     var optionDisp;
-    for (var i = 0; i < optionsArray.length; i++) { // WHY IS optionsArray UNDEFINED???????
+    //use buttons for the options(w/no borders, and use hover pseudoclass to change its appearance=================================================================================================
+    for (var i = 0; i < optionsArray.length; i++) { 
         if (i === 0) {
-            optionDisp = $("p").text(optionsArray[i]);
+            optionDisp = $("<p class='options'></p>").text(optionsArray[i]);
         }
         else{
-            optionDisp.append("<p>" + optionsArray[i] + "<p>");
+            optionDisp.append("<p class='options'>" + optionsArray[i] + "</p>");
         }
     }
     $("#quest-container").append(timeDisp, questDisp, optionDisp);
@@ -76,8 +77,12 @@ function questLayout() {
 
 function countDown() {
     //tracks the amount ot time alloted to each question.
-    timer--;
-    $("#timer").text("Time Remaining: " + timer + "Seconds");
+    if (timer > 0) {
+        timer--;
+        $("#timer").text("Time Remaining: " + timer + "Seconds");
+    }
+    
+    
 }
 function dispQuests() {
     //time alloted to each question is 30 seconds.
@@ -109,6 +114,11 @@ $("#start-btn").click(function(){
         dispQuests();
         //start the countdown
         questInterval = setInterval(countDown, 1000);
+        if (timer === 0) {
+            //clear the timer if countdown is at 0.
+            clearInterval(questInterval);
+
+        }
     }
 
 })
