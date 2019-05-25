@@ -78,7 +78,7 @@ function questLayout() {
     console.log(timeDisp.text());
     console.log(questDisp.text());
     //use buttons for the options(w/no borders, and use hover pseudoclass to change its appearance=================================================================================================
-    var optDivs = $("<div id='options-view'></div>");
+    var optDivs = $("<div class='options-view'></div>");
     //dynamically create buttons for the options.
     for (var i = 0; i < optionsArray.length; i++) { 
         var buttn = $("<button>");
@@ -89,7 +89,7 @@ function questLayout() {
     }
     //add time, question, and options to the question container.
     $("#quest-container").append(timeDisp, questDisp, optDivs);
-
+    
 }
 
 function countDown() {
@@ -110,17 +110,20 @@ function changeTimerZero() {
     clearInterval(questInterval);
     dispAnswerMessg("");
 }
-function dispQuests() {
+function dispQuest() {
     //time alloted to each question is 30 seconds.
     timer = 30;
     if (wasStartClicked) {
         //display first question and options if start button was clicked
         $("#start-btn").remove();
         questLayout();
+        questInterval = setInterval(countDown, 1000);
     }
     else{
         //display next question and options(after first question)
         questLayout();
+        questInterval = setInterval(countDown, 1000);
+        //THIS IS WHERE I NEED TO MAKE ADJUSTMENTS***********************************************************
     }
     
 }
@@ -139,21 +142,44 @@ function dispAnswerMessg(uOpt) {
         var ansStatus = $("<p id='timedOut-status'></p>").text("Out of Time!");
         var ansMessg = $("<p id='correct-ans'></p>").text("The correct answer was: " + currAns);// apppend them to the quest-containers!!!!!!!!!!!!!!!!!!!
         $("#quest-container").append(ansStatus, ansMessg);
+        //update number of questions unanswered
+        numNoAns++;
     }
     else if (uOpt === currAns) {
         //message for a correct response
         var ansStatus = $("<p id='correct-ans'></p>").text("Correct!");
         $("#quest-container").append(ansStatus);
+        //update number of questions answered correctly
+        numCorrect++;
     }
     else if (uOpt !== currAns) {
         //message for a wrong response 
         var ansStatus = $("<p id='wrong-status'></p>").text("Nope!");
         var ansMessg = $("<p id='correct-ans'></p>").text("The correct answer was: " + currAns);// apppend them to the quest-containers!!!!!!!!!!!!!!!!!!!
         $("#quest-container").append(ansStatus, ansMessg);
+        //update number of questions incorrectly answered
+        numWrong++;
 
     }
 
     
+}
+//shows the result of the end of the game.
+function resultDisp() {
+//remove all content of #quest-container, except time)
+$("#timedOut-status").remove();
+$("#correct-ans").remove();
+$("#wrong-status").remove();
+//include the elements that will display results.
+var resMessg = $("<p id='res-messg'></p>").text("All done, here is how you did!");
+var rightAns = $("<p id='right-ans'></p>").text("Correct Answers: " + numCorrect);
+var wrongAns = $("<p id='wrong-ans'></p>").text("Incorrect Answers: " + numWrong);
+var noAns = $("<p id='no-ans'></p>").text("Unanswered: " + numNoAns);
+var buttn = $("<button>");//.text("Start Over?");
+buttn.addClass("start-buttons");
+buttn.text("Start Over?");
+$("#quest-container").append(resMessg, rightAns, wrongAns, noAns, buttn);
+
 }
 
 //WHEN TO CLEAR THE setInterval() for a new question.
@@ -162,7 +188,7 @@ function dispAnswerMessg(uOpt) {
 var questTimer;
 
 //attach a click event to the start button
-$("#start-btn").click(function(){
+$(".start-buttons").click(function(){
     //var timeDisp = $("p #timer").text("Time Remaining: " + timer + "Seconds");
     //$("#quest-container").text("my name is.......");
     console.log($("#quest-container").text());
@@ -172,17 +198,18 @@ $("#start-btn").click(function(){
     if (wasStartClicked === false) {
         wasStartClicked = true;
         //display the questions and options
-        dispQuests();
+        dispQuest();
         //start the countdown
-        questInterval = setInterval(countDown, 1000);
+        //questInterval = setInterval(countDown, 1000);++++++++++++++++++++++++++++++++++++++++++++++++++++++++
         console.log("star-timer is: " + timer);
         /*if (timer === 0) {
             clearInterval(questInterval);
             dispAnswerMessg("");
         }*/
         //-----console.log("star-timer is: " + timer);
-        //click event for the option the user picks.
-        $(".btn-options").click(function(){
+        //click event for the option the user picks. use default
+        $("#quest-container").on("click", ".btn-options", function(){
+            console.log("Is this button event being registered?????");
             clearInterval(questInterval);
             if (!optionChosen) {
                 optionChosen = true;
@@ -194,12 +221,28 @@ $("#start-btn").click(function(){
                 //clearInterval(questInterval);
                 //display the answer message for 6 seconds.
             dispAnswerMessg(userOptPick);
-                //update tracker for the next question****************************************************************
-            questTracker++
-                //change the display to the next question and options after 6 seconds.
-                //===========ansTimeOut = setTimeout(dispQuest,6000);
-            
-        })
+            //update tracker for the next question****************************************************************
+            questTracker++;
+            if (questTracker < questBank.length) {
+                //display next question if it's not the last one.
+                
+                //display question after 6 seconds.
+                setTimeout(dispQuest, 6000);
+                $(".btn-options").click(function(){
+                    console.log("Inside nested click event");
+                })
+                //questInterval = setInterval(countDown, 1000);++++++++++++++++++++++++++++++++++CULPRIT HERE!
+                //do I need put a click event here to stop the timer?? why does the .btn-options click event not work??
+                console.log("start*****-timer is: " + timer);
+
+            }
+            else {
+                //display the results of the game after last question.
+                setTimeout(resultDisp, 6000);
+            }
+        });
+        
+        
         //----console.log("why is nothing happening");
         //if timer === 0 or option is selected(correct or wrong), change the display of the DOM to the answer message.
         //----console.log("timer is: " + timer);
