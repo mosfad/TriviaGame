@@ -66,7 +66,7 @@ function getCurrAns() {
         }
     }
 }
-//
+//dynamically create question and options
 function questLayout() {
     getCurrQuest();
     getCurrOptions();
@@ -77,26 +77,17 @@ function questLayout() {
     var questDisp = $("<p id= 'each-quest'></p>").text(eachQuest);
     console.log(timeDisp.text());
     console.log(questDisp.text());
-    //how to show options in different lines and 
-    var optionDisp;
     //use buttons for the options(w/no borders, and use hover pseudoclass to change its appearance=================================================================================================
-    //Add an attribute each button to store and identify the right option
     var optDivs = $("<div id='options-view'></div>");
+    //dynamically create buttons for the options.
     for (var i = 0; i < optionsArray.length; i++) { 
         var buttn = $("<button>");
         buttn.addClass("btn-options");
-        //buttn.attr(optionsArray[i]);
         buttn.text(optionsArray[i]);
         //append button to the options div.
         optDivs.append(buttn);
-        //optDivs.append($("<p>").text(optionsArray[i]));
-        /*if (i === 0) {
-            optionDisp = $("<p class='options'></p>").text(optionsArray[i]);
-        }
-        else{
-            optionDisp.append("<p class='options'>" + optionsArray[i] + "</p>");
-        }*/
     }
+    //add time, question, and options to the question container.
     $("#quest-container").append(timeDisp, questDisp, optDivs);
 
 }
@@ -107,8 +98,17 @@ function countDown() {
         timer--;
         $("#timer").text("Time Remaining: " + timer + "Seconds");
     }
-    
-    
+    if (timer === 0){
+        changeTimerZero();
+    }
+    console.log(timer);
+   
+}
+
+function changeTimerZero() {
+
+    clearInterval(questInterval);
+    dispAnswerMessg("");
 }
 function dispQuests() {
     //time alloted to each question is 30 seconds.
@@ -126,27 +126,33 @@ function dispQuests() {
 }
 
 //function displays the appropriate answer message for 6 seconds.
-function dispAnswerMessg(uText) {
-    //message for a timed out response stays the same
+function dispAnswerMessg(uOpt) {
+    //get the current answer.
+    getCurrAns();
     //remove the elements holding questions and options
     $("#each-quest").remove();
-    $("btn-options").remove();
-    if (uText === currAns) {
-        //message for a correct response
-        $("<p id='correct-ans'></p>").text("Correct!");
+    $(".btn-options").remove();
+    console.log("User picked this option: " + uOpt);
+    console.log("The current answer is " + currAns);
+    if (uOpt === "") {
+        //message for timed out response
+        var ansStatus = $("<p id='timedOut-status'></p>").text("Out of Time!");
+        var ansMessg = $("<p id='correct-ans'></p>").text("The correct answer was: " + currAns);// apppend them to the quest-containers!!!!!!!!!!!!!!!!!!!
+        $("#quest-container").append(ansStatus, ansMessg);
     }
-    
-    else if (userOption === 0) {
-        //message for a wrong response
-        $("<p id='correct-ans'></p>").text("Nope!");
-        $("<p id='correct-ans'></p>").text("The correct answer was: " + currAns);
+    else if (uOpt === currAns) {
+        //message for a correct response
+        var ansStatus = $("<p id='correct-ans'></p>").text("Correct!");
+        $("#quest-container").append(ansStatus);
+    }
+    else if (uOpt !== currAns) {
+        //message for a wrong response 
+        var ansStatus = $("<p id='wrong-status'></p>").text("Nope!");
+        var ansMessg = $("<p id='correct-ans'></p>").text("The correct answer was: " + currAns);// apppend them to the quest-containers!!!!!!!!!!!!!!!!!!!
+        $("#quest-container").append(ansStatus, ansMessg);
+
     }
 
-    else {
-        //message for timed out response
-        $("<p id='correct-ans'></p>").text("Out of Time!");
-        $("<p id='correct-ans'></p>").text("The correct answer was: " + currAns);
-    }
     
 }
 
@@ -169,32 +175,55 @@ $("#start-btn").click(function(){
         dispQuests();
         //start the countdown
         questInterval = setInterval(countDown, 1000);
+        console.log("star-timer is: " + timer);
+        /*if (timer === 0) {
+            clearInterval(questInterval);
+            dispAnswerMessg("");
+        }*/
+        //-----console.log("star-timer is: " + timer);
         //click event for the option the user picks.
         $(".btn-options").click(function(){
+            clearInterval(questInterval);
             if (!optionChosen) {
                 optionChosen = true;
             }
             userOptPick = $(this).text();
             console.log(userOptPick);
+            console.log("btn-timer is: " + timer);
+                //clear the timer if countdown is at 0 or the user chooses an option.
+                //clearInterval(questInterval);
+                //display the answer message for 6 seconds.
+            dispAnswerMessg(userOptPick);
+                //update tracker for the next question****************************************************************
+            questTracker++
+                //change the display to the next question and options after 6 seconds.
+                //===========ansTimeOut = setTimeout(dispQuest,6000);
+            
         })
+        //----console.log("why is nothing happening");
         //if timer === 0 or option is selected(correct or wrong), change the display of the DOM to the answer message.
-        if (timer === 0 || optionChosen) {
+        //----console.log("timer is: " + timer);
+        //-----console.log("Has option been chosen? " + optionChosen)
+        /*if (timer === 0 || optionChosen) {
             //clear the timer if countdown is at 0 or the user chooses an option.
-            clearInterval(questInterval);
+            //clearInterval(questInterval);
             //display the answer message for 6 seconds.
             dispAnswerMessg(userOptPick);
-            //change the display to the next question and options after 6 seconds.
-            ansTimeOut = setTimeout(dispQuests, 6000);
             //update tracker for the next question****************************************************************
-            questTracker++;
+            questTracker++*/
+            //change the display to the next question and options after 6 seconds.
+            //===========ansTimeOut = setTimeout(dispQuests, 6000);
+            //-----console.log("why is nothing happening");
+            
+       
             //how do I repeat the above process until the last question?
 
-        }
+        //}
     }
     //
-    if(wasStartClicked && (questTracker < questBank.length )){
+    //if(wasStartClicked && (questTracker < questBank.length )){
     //display question and options if it is not the first one.
-    }
+    //}
 
 })
 

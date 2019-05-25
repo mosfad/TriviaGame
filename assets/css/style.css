@@ -50,7 +50,13 @@ header {
 
 
 }
+
+.btn-options{
+    display: block;
+    border: none;
+    background: none;
 }
+
 /*
 header{
     background: #cf6800;
