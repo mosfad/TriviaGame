@@ -7,7 +7,7 @@ var numCorrect = 0;
 var numWrong = 0;
 var numNoAns = 0;
 var wasStartClicked = false;   //how do i track last question?
-var optionChosen = false; //tracks whether option was clicked.
+//var optionChosen = false; //tracks whether option was clicked.
 var eachQuest = "";    
 var currAns = "";
 var questTracker = 0;  //Keeps track index of current question.
@@ -17,10 +17,7 @@ var timer = 30;//displays current time in seconds.
 var userOptPick = "";
 
 
-//resets the game.
-function reset(){
 
-}
 
 //Object holds the game data
 var questBank = [
@@ -28,10 +25,32 @@ var questBank = [
         , {"Which of these cities is the most populous in North America?": {"Los Angeles, United States":0, "Mexico City, Mexico":1, "New York City, United States":0, "Toronto, Canada":0}}
         , {"Which of these countries is not a member of the European Union?": {"France":0, "Sweden":0, "Switzerland":1, "Latvia":0}}
         , {"Which country has the largest landmass in North America?": {"United States":0, "Nicaragua":0, "Mexico":0, "Canada":1}}
-        , {"What is the poulation of the largest country in Africa?": {"50 million":0, "300 million":0, "200 million":1, "150 million":0}}
+        , {"What is the population of the largest country in Africa?": {"50 million":0, "300 million":0, "200 million":1, "150 million":0}}
         , {"What is the population of the largest country in Europe?": {"138 million":0, "143 million":1, "82 million":0, "65 million":0}}
         , {"Which of these countries has the largest world reserves?": {"Venezuela":1, "Saudi Arabia":0, "Iran":0, "Canada":0}}
 ];
+var questGif = ['<iframe src="https://giphy.com/embed/kWKwwVxyhJ7A4" width="480" height="350" frameBorder="0" class="giphy-embed" allowFullScreen></iframe>',
+'<iframe src="https://giphy.com/embed/3ohuAvEfJ9GrpBgQw0" width="480" height="264" frameBorder="0" class="giphy-embed" allowFullScreen></iframe>', 
+'<iframe src="https://giphy.com/embed/ZcW4W6fbSX9aU1FolZ" width="480" height="270" frameBorder="0" class="giphy-embed" allowFullScreen></iframe>',
+'<iframe src="https://giphy.com/embed/TM9k3mdYgeudi" width="480" height="313" frameBorder="0" class="giphy-embed" allowFullScreen></iframe>',
+'<iframe src="https://giphy.com/embed/74iHYeuF74YCI" width="480" height="350" frameBorder="0" class="giphy-embed" allowFullScreen></iframe>',
+'<iframe src="https://giphy.com/embed/98962YSKX9Ely" width="360" height="350" frameBorder="0" class="giphy-embed" allowFullScreen></iframe>',
+'<iframe src="https://giphy.com/embed/Y3SCFPA3ctXn6K9WVF" width="480" height="350" frameBorder="0" class="giphy-embed" allowFullScreen></iframe>'
+]
+
+//resets the game.
+function resetGame(){
+    numCorrect = 0;
+    numWrong = 0;
+    wasStartClicked = false;
+    eachQuest = "";
+    currAns = "";
+    questTracker = 0;
+    optionArray = [];
+    flagsArray = [];
+    timer = 30;
+    userOptPick = "";
+}
 
 function getCurrQuest() {
     //update the current question
@@ -70,10 +89,12 @@ function getCurrAns() {
 function questLayout() {
     getCurrQuest();
     getCurrOptions();
+    //clear the user pick for the current question
+    userOptPick = "";
     //clear contents of the div holding questions, options, or other messages.
     $("#quest-container").empty();
     //organizes the layout of page so that questions and options are displayed.
-    var timeDisp = $("<p id='timer'></p>").text("Time Remaining: " + timer + "Seconds");
+    var timeDisp = $("<p id='timer'></p>").text("Time Remaining: " + timer + " Seconds");
     var questDisp = $("<p id= 'each-quest'></p>").text(eachQuest);
     console.log(timeDisp.text());
     console.log(questDisp.text());
@@ -88,7 +109,7 @@ function questLayout() {
         optDivs.append(buttn);
     }
     //add time, question, and options to the question container.
-    $("#quest-container").append(timeDisp, questDisp, optDivs);
+    $("#quest-container").append(timeDisp, "<br/>", questDisp, optDivs);
     
 }
 
@@ -96,7 +117,8 @@ function countDown() {
     //tracks the amount ot time alloted to each question.
     if (timer > 0) {
         timer--;
-        $("#timer").text("Time Remaining: " + timer + "Seconds");
+        $("#timer").text("Time Remaining: " + timer + " Seconds");
+        console.log("the user pick is " + userOptPick);
     }
     else if (timer === 0 && userOptPick === ""){
         //this conditional statement fixes display when user gives no answer.
@@ -105,6 +127,7 @@ function countDown() {
         noUserAnswer();
         //clearInterval(questInterval);
     }
+    console.log("the user pick is " + userOptPick);
     console.log(timer);
    
 }
@@ -148,14 +171,16 @@ function dispAnswerMessg(uOpt) {
         //message for timed out response
         var ansStatus = $("<p id='timedOut-status'></p>").text("Out of Time!");
         var ansMessg = $("<p id='correct-ans'></p>").text("The correct answer was: " + currAns);// apppend them to the quest-containers!!!!!!!!!!!!!!!!!!!
-        $("#quest-container").append(ansStatus, ansMessg);
+        var ansGif = $(questGif[questTracker]);
+        $("#quest-container").append(ansStatus, ansMessg, ansGif);
         //update number of questions unanswered
         numNoAns++;
     }
     else if (uOpt === currAns) {
         //message for a correct response
         var ansStatus = $("<p id='correct-ans'></p>").text("Correct!");
-        $("#quest-container").append(ansStatus);
+        var ansGif = $(questGif[questTracker]);
+        $("#quest-container").append(ansStatus, ansGif);
         //update number of questions answered correctly
         numCorrect++;
     }
@@ -163,7 +188,8 @@ function dispAnswerMessg(uOpt) {
         //message for a wrong response 
         var ansStatus = $("<p id='wrong-status'></p>").text("Nope!");
         var ansMessg = $("<p id='correct-ans'></p>").text("The correct answer was: " + currAns);// apppend them to the quest-containers!!!!!!!!!!!!!!!!!!!
-        $("#quest-container").append(ansStatus, ansMessg);
+        var ansGif = $(questGif[questTracker]);
+        $("#quest-container").append(ansStatus, ansMessg, ansGif);
         //update number of questions incorrectly answered
         numWrong++;
 
@@ -177,6 +203,7 @@ function resultDisp() {
 $("#timedOut-status").remove();
 $("#correct-ans").remove();
 $("#wrong-status").remove();
+$(".giphy-embed").remove();
 //include the elements that will display results.
 var resMessg = $("<p id='res-messg'></p>").text("All done, here is how you did!");
 var rightAns = $("<p id='right-ans'></p>").text("Correct Answers: " + numCorrect);
@@ -195,13 +222,11 @@ $("#quest-container").append(resMessg, rightAns, wrongAns, noAns, buttn);
 //var questTimer;
 
 //attach a click event to the start button
-$(".start-buttons").click(function(){
-    //var timeDisp = $("p #timer").text("Time Remaining: " + timer + "Seconds");
-    //$("#quest-container").text("my name is.......");
+$("#game-container").on("click", ".start-buttons", function(){
     console.log($("#quest-container").text());
 
-    //wasStartClicked = true;
-    //timer interval or
+    //reset the game to play again.
+    resetGame();
     if (wasStartClicked === false) {
         wasStartClicked = true;
         //display the questions and options
@@ -218,9 +243,9 @@ $(".start-buttons").click(function(){
         $("#quest-container").on("click", ".btn-options", function(){
             console.log("Is this button event being registered?????");
             clearInterval(questInterval);
-            if (!optionChosen) {
+            /*if (!optionChosen) {
                 optionChosen = true;
-            }
+            }*/
             userOptPick = $(this).text();
             console.log(userOptPick);
             console.log("btn-timer is: " + timer);
@@ -246,35 +271,8 @@ $(".start-buttons").click(function(){
                 setTimeout(resultDisp, 6000);
             }
         });
-        
-
-        
-        
-        //----console.log("why is nothing happening");
-        //if timer === 0 or option is selected(correct or wrong), change the display of the DOM to the answer message.
-        //----console.log("timer is: " + timer);
-        //-----console.log("Has option been chosen? " + optionChosen)
-        /*if (timer === 0 || optionChosen) {
-            //clear the timer if countdown is at 0 or the user chooses an option.
-            //clearInterval(questInterval);
-            //display the answer message for 6 seconds.
-            dispAnswerMessg(userOptPick);
-            //update tracker for the next question****************************************************************
-            questTracker++*/
-            //change the display to the next question and options after 6 seconds.
-            //===========ansTimeOut = setTimeout(dispQuests, 6000);
-            //-----console.log("why is nothing happening");
-            
-       
-            //how do I repeat the above process until the last question?
-
-        //}
     }
-    //
-    //if(wasStartClicked && (questTracker < questBank.length )){
-    //display question and options if it is not the first one.
-    //}
+    
+});
 
-})
-
-})
+});

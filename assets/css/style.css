@@ -1,5 +1,6 @@
 body{
     background-image: url("../images/funky-lines.png");
+    line-height: 2;
 }
 
 #game-container{
@@ -36,6 +37,16 @@ header {
     flex-flow: row wrap;
     justify-content: center;
 }
+.start-buttons{
+    font-family: 'Orbitron', sans-serif;
+    display: block;
+    border: none;
+    background: none;
+    font-size: 200%;
+    font-weight: bolder;
+    color:#0000ff;
+    margin: auto;
+}
 #start-btn{
     /*margin: auto;*/
     
@@ -55,12 +66,32 @@ header {
     display: block;
     border: none;
     background: none;
+    font-family: 'Ubuntu', sans-serif;
+    font-size: 150%;
+    margin: auto;
+    text-align: center;
+}
+.options-view {
+    text-align: center;
 }
 
 p{
-    font-family: 'Roboto', sans-serif;
+    font-family: 'Rubik', sans-serif;
+    font-size: 200%;
+    text-align: center;
 }
 
+button{
+    font-family: 'Ubuntu', sans-serif;
+    font-size: 150%;
+    text-align: center;
+}
+
+#timer{
+    font-family: 'Courgette', cursive;
+    color: #b22222;
+    text-align: center;
+}
 /*
 header{
     background: #cf6800;
