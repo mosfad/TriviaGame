@@ -27,7 +27,7 @@ var questBank = [
         , {"Which country has the largest landmass in North America?": {"United States":0, "Nicaragua":0, "Mexico":0, "Canada":1}}
         , {"What is the population of the largest country in Africa?": {"50 million":0, "300 million":0, "200 million":1, "150 million":0}}
         , {"What is the population of the largest country in Europe?": {"138 million":0, "143 million":1, "82 million":0, "65 million":0}}
-        , {"Which of these countries has the largest world reserves?": {"Venezuela":1, "Saudi Arabia":0, "Iran":0, "Canada":0}}
+        , {"Which of these countries has the largest oil reserves?": {"Venezuela":1, "Saudi Arabia":0, "Iran":0, "Canada":0}}
 ];
 var questGif = ['<iframe src="https://giphy.com/embed/kWKwwVxyhJ7A4" width="480" height="350" frameBorder="0" class="giphy-embed" allowFullScreen></iframe>',
 '<iframe src="https://giphy.com/embed/3ohuAvEfJ9GrpBgQw0" width="480" height="264" frameBorder="0" class="giphy-embed" allowFullScreen></iframe>', 
