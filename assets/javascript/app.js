@@ -24,13 +24,13 @@ function reset(){
 
 //Object holds the game data
 var questBank = [
-            {quest1: {"OptionA":1, "OptionB":0, "OptionC":0, "OptionD":0}}
-        , {quest2: {"OptionA":0, "OptionB":1, "OptionC":0, "OptionD":0}}
-        , {quest3: {"OptionA":0, "OptionB":0, "OptionC":1, "OptionD":0}}
-        , {quest4: {"OptionA":0, "OptionB":0, "OptionC":0, "OptionD":1}}
-        , {quest5: {"OptionA":0, "OptionB":0, "OptionC":1, "OptionD":0}}
-        , {quest6: {"OptionA":0, "OptionB":1, "OptionC":0, "OptionD":0}}
-        , {quest7: {"OptionA":1, "OptionB":0, "OptionC":0, "OptionD":0}}
+            {"How many countries are in Africa?": {"54":1, "25":0, "22":0, "38":0}}
+        , {"Which of these cities is the most populous in North America?": {"Los Angeles, United States":0, "Mexico City, Mexico":1, "New York City, United States":0, "Toronto, Canada":0}}
+        , {"Which of these countries is not a member of the European Union?": {"France":0, "Sweden":0, "Switzerland":1, "Latvia":0}}
+        , {"Which country has the largest landmass in North America?": {"United States":0, "Nicaragua":0, "Mexico":0, "Canada":1}}
+        , {"What is the poulation of the largest country in Africa?": {"50 million":0, "300 million":0, "200 million":1, "150 million":0}}
+        , {"What is the population of the largest country in Europe?": {"138 million":0, "143 million":1, "82 million":0, "65 million":0}}
+        , {"Which of these countries has the largest world reserves?": {"Venezuela":1, "Saudi Arabia":0, "Iran":0, "Canada":0}}
 ];
 
 function getCurrQuest() {
@@ -98,34 +98,41 @@ function countDown() {
         timer--;
         $("#timer").text("Time Remaining: " + timer + "Seconds");
     }
-    if (timer === 0){
-        changeTimerZero();
+    else if (timer === 0 && userOptPick === ""){
+        //this conditional statement fixes display when user gives no answer.
+        console.log("the timer is " + timer);
+        console.log("the user pick is " + userOptPick);
+        noUserAnswer();
+        //clearInterval(questInterval);
     }
     console.log(timer);
    
 }
 
-function changeTimerZero() {
+function noUserAnswer() {
 
     clearInterval(questInterval);
     dispAnswerMessg("");
+    //Go to the next question
+    questTracker++;
+    if (questTracker < questBank.length) {
+        setTimeout(dispQuest, 5000);
+    }
+    else {
+        setTimeout(resultDisp, 5000);
+    }
 }
 function dispQuest() {
     //time alloted to each question is 30 seconds.
     timer = 30;
     if (wasStartClicked) {
-        //display first question and options if start button was clicked
+        //remove start button before displaying elements.
         $("#start-btn").remove();
-        questLayout();
-        questInterval = setInterval(countDown, 1000);
     }
-    else{
-        //display next question and options(after first question)
-        questLayout();
-        questInterval = setInterval(countDown, 1000);
-        //THIS IS WHERE I NEED TO MAKE ADJUSTMENTS***********************************************************
-    }
-    
+    //display next question and option.
+    questLayout();
+    questInterval = setInterval(countDown, 1000);
+        //THIS IS WHERE I NEED TO MAKE ADJUSTMENTS***********************************************************   
 }
 
 //function displays the appropriate answer message for 6 seconds.
@@ -185,7 +192,7 @@ $("#quest-container").append(resMessg, rightAns, wrongAns, noAns, buttn);
 //WHEN TO CLEAR THE setInterval() for a new question.
 
 //Timer is set to 30 seconds for each question.
-var questTimer;
+//var questTimer;
 
 //attach a click event to the start button
 $(".start-buttons").click(function(){
@@ -228,9 +235,7 @@ $(".start-buttons").click(function(){
                 
                 //display question after 6 seconds.
                 setTimeout(dispQuest, 6000);
-                $(".btn-options").click(function(){
-                    console.log("Inside nested click event");
-                })
+               
                 //questInterval = setInterval(countDown, 1000);++++++++++++++++++++++++++++++++++CULPRIT HERE!
                 //do I need put a click event here to stop the timer?? why does the .btn-options click event not work??
                 console.log("start*****-timer is: " + timer);
@@ -241,6 +246,8 @@ $(".start-buttons").click(function(){
                 setTimeout(resultDisp, 6000);
             }
         });
+        
+
         
         
         //----console.log("why is nothing happening");
