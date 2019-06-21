@@ -8,7 +8,8 @@ The program is a wonderful way to improve your knowledge about different countri
 
 *Please start the game by pressing the start button*. After the program displays the results of the game, please press the *start over button* to begin another game.   You can also completely reset the whole game by refreshing your browser.
 
-
+### Deployed App
+https://mosfad.github.io/TriviaGame/
 
 ### Contact me about the Trivia Game. ###
 maafadina@gmail.com
